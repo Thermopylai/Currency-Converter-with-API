@@ -25,6 +25,16 @@ namespace Currency_Converter_with_API
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        //Store your own API key here:
+        //You can get a free API key from http://freecurrencyapi.com
+        //just by registering a user acount with a valid email address.
+        //If you wan't to add more currencies to the app, you can do so
+        //just by modifying the URL that is used in the GetValues() method and by
+        //adding the needed row(s) into dtCurrencies DataTable in the BindCurrencies() method.
+        const string APIKey = "fca_live_6vWt6N2Il5g0qLzHa7Gp4UwHtyWnRsawNoCY7K0j";
+
+
         //Create classes to deserialize the JSON response from the API
         //Root class is the main class which contains Rates class object
         //Rates class contains all currency properties which we want to fetch from API
@@ -45,6 +55,7 @@ namespace Currency_Converter_with_API
         }
         //Create an object of Root class
         Root val = new Root();
+              
         public MainWindow()
         {
             InitializeComponent();
@@ -59,7 +70,7 @@ namespace Currency_Converter_with_API
             //Call GetDataGetMethod method and pass the API URL
             //The method returns a Task<Root> which represents an asynchronous operation that will eventually produce a Root object.
             //The await keyword is used to suspend the execution of the async method until the awaited task completes.
-            val = await GetDataGetMethod<Root>("https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_6vWt6N2Il5g0qLzHa7Gp4UwHtyWnRsawNoCY7K0j&currencies=USD%2CEUR%2CGBP%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD");
+            val = await GetDataGetMethod<Root>($"https://api.freecurrencyapi.com/v1/latest?apikey={APIKey}&currencies=USD%2CEUR%2CGBP%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD");
             BindCurrencies();
         }
 
