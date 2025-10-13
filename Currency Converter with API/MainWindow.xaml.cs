@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.IO;
 
 
 
@@ -32,7 +33,9 @@ namespace Currency_Converter_with_API
         //If you wan't to add more currencies to the app, you can do so
         //just by modifying the URL that is used in the GetValues() method and by
         //adding the needed row(s) into dtCurrencies DataTable in the BindCurrencies() method.
-        const string APIKey = "fca_live_6vWt6N2Il5g0qLzHa7Gp4UwHtyWnRsawNoCY7K0j";
+        public static string APIKey = string.Empty;
+        //Add extra currencies here, separated with a comma (%2C).
+        public static string currencies = "USD%2CEUR%2CGBP%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD";
 
 
         //Create classes to deserialize the JSON response from the API
@@ -60,8 +63,34 @@ namespace Currency_Converter_with_API
         {
             InitializeComponent();
             ClearControls();
-            GetValues();
+            
+        }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Setup();
+            GetValues();
+        }
+
+        private void Setup()
+        {
+            if (File.Exists("setup.ini"))
+            {
+                APIKey = File.ReadAllText("setup.ini");
+                txtCurrency.Focus();
+            }
+            else if (APIKey == string.Empty)
+            {
+                Setup setup = new Setup();
+                setup.Owner = this;
+                setup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                setup.ShowDialog();
+
+                Dispatcher.InvokeAsync(() =>
+                {
+                    txtCurrency.Focus();
+                });
+            }
         }
 
         //GetValues method is used to call GetDataGetMethod method and pass the API URL
@@ -70,7 +99,7 @@ namespace Currency_Converter_with_API
             //Call GetDataGetMethod method and pass the API URL
             //The method returns a Task<Root> which represents an asynchronous operation that will eventually produce a Root object.
             //The await keyword is used to suspend the execution of the async method until the awaited task completes.
-            val = await GetDataGetMethod<Root>($"https://api.freecurrencyapi.com/v1/latest?apikey={APIKey}&currencies=USD%2CEUR%2CGBP%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD");
+            val = await GetDataGetMethod<Root>($"https://api.freecurrencyapi.com/v1/latest?apikey={APIKey}&currencies={currencies}");
             BindCurrencies();
         }
 
@@ -169,7 +198,6 @@ namespace Currency_Converter_with_API
             if (cmbFromCurrency.Items.Count > 0) cmbFromCurrency.SelectedIndex = 0;
             if (cmbToCurrency.Items.Count > 0) cmbToCurrency.SelectedIndex = 0; 
             lblCurrency.Content = string.Empty;
-            txtCurrency.Focus();
         }
 
         //Allow only integers in TextBox
@@ -241,6 +269,7 @@ namespace Currency_Converter_with_API
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             ClearControls();
+            txtCurrency.Focus();
         }
         #endregion
     }
