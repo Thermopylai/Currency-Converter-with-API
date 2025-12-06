@@ -13,7 +13,7 @@
             <RowDefinition Height="80"/>
             <RowDefinition Height="150"/>
             <RowDefinition Height="100"/>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="160"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="2" Width="800" CornerRadius="10" BorderThickness="5">

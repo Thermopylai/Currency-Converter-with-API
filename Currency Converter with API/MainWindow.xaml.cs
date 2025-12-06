@@ -109,8 +109,9 @@ namespace Currency_Converter_with_API
         //The async keyword indicates that the method is asynchronous and can use the await keyword to suspend execution until the awaited task completes.
         public static async Task<Root> GetDataGetMethod<T>(string url)
         {
-            //Create an object of Root class
-            var ss = new Root();
+            //Create an empty object of Root class
+            //This object will be returned if there is any issue while calling the API.
+            var emptyRoot = new Root();
             try
             {
                 //HttpClient class provides a base class for sending/receiving the HTTP requests/responses from a URL.
@@ -143,13 +144,13 @@ namespace Currency_Converter_with_API
                         var responseObject = JsonSerializer.Deserialize<Root>(responseString);
                         return responseObject; //Return the deserialized API response as a Root object
                     }
-                    return ss;
+                    return emptyRoot; //Return an empty Root object if API response status code is not ok.
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error fetching currency data: {ex.Message}", "API Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return ss;
+                return emptyRoot; //Return empty Root object if there is any exception while calling API.
             }
         }
 
