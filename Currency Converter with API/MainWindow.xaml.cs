@@ -30,7 +30,7 @@ namespace Currency_Converter_with_API
         //Store your own API key here:
         //You can get a free API key from http://freecurrencyapi.com
         //just by registering a user acount with a valid email address.
-        //If you wan't to add more currencies to the app, you can do so
+        //If you wanted to add more currencies to the app, you can do so
         //just by modifying the URL that is used in the GetValues() method and by
         //adding the needed row(s) into dtCurrencies DataTable in the BindCurrencies() method.
         public static string APIKey = string.Empty;
